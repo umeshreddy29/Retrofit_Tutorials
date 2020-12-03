@@ -30,4 +30,6 @@ interface JsonApi {
     suspend fun patchPostRequest(@Path("id") id: Int, @Body jsonAPiResponse: JsonAPiResponse): Response<JsonAPiResponse>
 
 
+    @DELETE("posts/{id}")
+    suspend fun deletePost(@Path("id")id:Int):Response<Unit>
 }
