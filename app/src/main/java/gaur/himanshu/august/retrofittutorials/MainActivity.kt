@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import gaur.himanshu.august.retrofittutorials.`object`.CommentResponce
+import gaur.himanshu.august.retrofittutorials.`object`.JsonAPiResponse
 import gaur.himanshu.august.retrofittutorials.recycler.RecyclerAdapter
 import gaur.himanshu.august.retrofittutorials.retrofit.JsonApi
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    val data = MutableLiveData<List<CommentResponce>>()
+    val data = MutableLiveData<List<JsonAPiResponse>>()
 
     //  val data = MutableLiveData<JsonAPiResponce>()  for jsonApi.getPostsParticularId(4)
 
@@ -52,9 +52,14 @@ class MainActivity : AppCompatActivity() {
 
             // val responce = jsonApi.getPostsParticularId(5)
 
-            val responce = jsonApi.getCommentPostId(6)
+            //  val responce = jsonApi.getCommentPostId(6)
+
+            val responce = jsonApi.postDataToServer(JsonAPiResponse("This is Body", 102, "This is Title", 3))
             if (responce.isSuccessful) {
-                data.postValue(responce.body())
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+
             }
         }
     }

@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import gaur.himanshu.august.retrofittutorials.R
 import gaur.himanshu.august.retrofittutorials.`object`.CommentResponce
+import gaur.himanshu.august.retrofittutorials.`object`.JsonAPiResponse
 
-class RecyclerAdapter(val list: List<CommentResponce>) : RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>() {
+class RecyclerAdapter(val list: List<JsonAPiResponse>) : RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -23,7 +24,7 @@ class RecyclerAdapter(val list: List<CommentResponce>) : RecyclerView.Adapter<Re
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.MyViewHolder, position: Int) {
-        holder.title.text = list[position].name
+        holder.title.text = list[position].title
         holder.description.text = list[position].body
         holder.id.text = list[position].id.toString()
     }
