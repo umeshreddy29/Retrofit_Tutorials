@@ -20,6 +20,14 @@ interface JsonApi {
 
 
     @POST("posts")
-    suspend fun postDataToServer(@Body jsonAPiResponse: JsonAPiResponse):Response<JsonAPiResponse>
+    suspend fun postDataToServer(@Body jsonAPiResponse: JsonAPiResponse): Response<JsonAPiResponse>
+
+
+    @PUT("posts/{id}")
+    suspend fun putPostRequest(@Path("id") id: Int, @Body jsonAPiResponse: JsonAPiResponse): Response<JsonAPiResponse>
+
+    @PATCH("posts/{id}")
+    suspend fun patchPostRequest(@Path("id") id: Int, @Body jsonAPiResponse: JsonAPiResponse): Response<JsonAPiResponse>
+
 
 }

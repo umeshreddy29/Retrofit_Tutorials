@@ -36,7 +36,11 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
 
 
-        getData(jsonApi)
+        //getData(jsonApi)
+
+      //  putPostRequest(jsonApi)
+
+        patchtPostRequest(jsonApi)
 
         data.observe(this, {
             val adapter = RecyclerAdapter(it)
@@ -63,6 +67,56 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    // POST
+    fun postRequest(jsonApi: JsonApi){
+        CoroutineScope(Dispatchers.IO).launch {
+            val responce=jsonApi.postDataToServer(JsonAPiResponse("This is Body",100,"This is Title",3))
+
+            if(responce.isSuccessful){
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+
+            }else{
+
+            }
+        }
+    }
+
+    // PUT
+    fun putPostRequest(jsonApi: JsonApi){
+        CoroutineScope(Dispatchers.IO).launch {
+            val responce=jsonApi.putPostRequest(4, JsonAPiResponse("Body",4,null,6))
+
+            if(responce.isSuccessful){
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+
+            }else{
+
+            }
+        }
+
+    }
+    // PATCH
+    fun patchtPostRequest(jsonApi: JsonApi){
+        CoroutineScope(Dispatchers.IO).launch {
+            val responce=jsonApi.patchPostRequest(4, JsonAPiResponse("Body",4," ",6))
+
+            if(responce.isSuccessful){
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+
+            }else{
+
+            }
+        }
+
+    }
+
 
 
 }
