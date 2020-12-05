@@ -3,7 +3,6 @@ package gaur.himanshu.august.retrofittutorials
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     val data = MutableLiveData<List<JsonAPiResponse>>()
 
-    val delete= MutableLiveData<Int>()
+    val delete = MutableLiveData<Int>()
     //  val data = MutableLiveData<JsonAPiResponce>()  for jsonApi.getPostsParticularId(4)
 
 
@@ -42,23 +41,25 @@ class MainActivity : AppCompatActivity() {
 
         // putPostRequest(jsonApi) Part-3
 
-        // patchtPostRequest(jsonApi) Part-4
+        // patchPostRequest(jsonApi) Part-4
 
-        deletePosts(jsonApi,4)
+        //  deletePosts(jsonApi, 4) Part-5
+
+        // putWithField(jsonApi) Part-6
+
+        patchWithField(jsonApi) // Part-6
 
         delete.observe(this, {
             if (it != null) {
-                Toast.makeText(this@MainActivity,it.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, it.toString(), Toast.LENGTH_SHORT).show()
                 Log.d("TAG", "onCreate: $it")
             }
-
         })
 
         data.observe(this, {
             val adapter = RecyclerAdapter(it)
             recyclerView.adapter = adapter
         })
-
 
     }
 
@@ -70,7 +71,8 @@ class MainActivity : AppCompatActivity() {
                 responce.body()?.let {
                     data.postValue(listOf(it))
                 }
-
+            } else {
+                Log.d("TAG", "getData: ${responce.message()}")
             }
         }
     }
@@ -79,14 +81,12 @@ class MainActivity : AppCompatActivity() {
     fun postRequest(jsonApi: JsonApi) {
         CoroutineScope(Dispatchers.IO).launch {
             val responce = jsonApi.postDataToServer(JsonAPiResponse("This is Body", 100, "This is Title", 3))
-
             if (responce.isSuccessful) {
                 responce.body()?.let {
                     data.postValue(listOf(it))
                 }
-
             } else {
-
+                Log.d("TAG", "postRequest: ${responce.message()}")
             }
         }
     }
@@ -95,21 +95,18 @@ class MainActivity : AppCompatActivity() {
     fun putPostRequest(jsonApi: JsonApi) {
         CoroutineScope(Dispatchers.IO).launch {
             val responce = jsonApi.putPostRequest(4, JsonAPiResponse("Body", 4, null, 6))
-
             if (responce.isSuccessful) {
                 responce.body()?.let {
                     data.postValue(listOf(it))
                 }
-
             } else {
-
+                Log.d("TAG", "putPostRequest: ${responce.message()}")
             }
         }
-
     }
 
     // PATCH
-    fun patchtPostRequest(jsonApi: JsonApi) {
+    fun patchPostRequest(jsonApi: JsonApi) {
         CoroutineScope(Dispatchers.IO).launch {
             val responce = jsonApi.patchPostRequest(4, JsonAPiResponse("Body", 4, " ", 6))
 
@@ -117,26 +114,51 @@ class MainActivity : AppCompatActivity() {
                 responce.body()?.let {
                     data.postValue(listOf(it))
                 }
-
             } else {
-
+                Log.d("TAG", "patchPostRequest: ${responce.message()}")
             }
         }
-
     }
 
-    //DELETE
-    fun deletePosts(jsonApi: JsonApi,id:Int){
+    // DELETE
+    fun deletePosts(jsonApi: JsonApi, id: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response=jsonApi.deletePost(id)
-            if(response.isSuccessful){
+            val response = jsonApi.deletePost(id)
+            if (response.isSuccessful) {
                 Log.d("TAG", "patchtPostRequest: ${response.code()}.")
                 delete.postValue(response.code())
-            }else{
-
+            } else {
+                Log.d("TAG", "deletePosts: ${response.message()}")
             }
         }
     }
 
+    // PUT @Field
+    fun putWithField(jsonApi: JsonApi) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val responce = jsonApi.putWithField("This is my body", 3)
+            if (responce.isSuccessful) {
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+            } else {
+                Log.d("TAG", "putPostRequest: ${responce.message()}")
+            }
+        }
+    }
+
+    // PATCH @Field
+    fun patchWithField(jsonApi: JsonApi) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val responce = jsonApi.patchWithField(3, "This is my body")
+            if (responce.isSuccessful) {
+                responce.body()?.let {
+                    data.postValue(listOf(it))
+                }
+            } else {
+                Log.d("TAG", "patchPostRequest: ${responce.message()}")
+            }
+        }
+    }
 
 }

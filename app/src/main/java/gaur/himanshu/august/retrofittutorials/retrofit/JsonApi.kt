@@ -31,5 +31,15 @@ interface JsonApi {
 
 
     @DELETE("posts/{id}")
-    suspend fun deletePost(@Path("id")id:Int):Response<Unit>
+    suspend fun deletePost(@Path("id") id: Int): Response<Unit>
+
+    @FormUrlEncoded
+    @PUT("posts/{id}")
+    suspend fun putWithField(@Field("body") body: String, @Path("id") id: Int): Response<JsonAPiResponse>
+
+    @FormUrlEncoded
+    @PATCH("posts/{id}")
+    suspend fun patchWithField(@Path("id") id: Int, @Field("body") body: String): Response<JsonAPiResponse>
+
+
 }
